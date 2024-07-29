@@ -1,44 +1,17 @@
-import express from "express";
-import { google } from "googleapis";
-import dotenv from "dotenv";
+import { slides_v1 } from "googleapis";
 import { v4 as uuidv4 } from "uuid";
 
-dotenv.config();
-
-const app = express();
-
-app.use(express.json());
-
-const oauth2Client = new google.auth.OAuth2(
-  process.env.GOOGLE_CLIENT_ID,
-  process.env.GOOGLE_CLIENT_SECRET,
-  process.env.GOOGLE_REDIRECT_URL
-);
-
-app.get("/auth", (req, res) => {
-  const url = oauth2Client.generateAuthUrl({
-    access_type: "offline",
-    scope: "https://www.googleapis.com/auth/presentations",
-  });
-  res.redirect(url);
-});
-
-app.get("/oauth2callback", async (req, res) => {
-  const { code } = req.query;
-  const { tokens } = await oauth2Client.getToken(code as string);
-  oauth2Client.setCredentials(tokens);
-  res.send("Authentication successful");
-
-  const slides = google.slides({
-    version: "v1",
-    auth: oauth2Client,
-  });
-
-  const presentationId = "1bfRKbhaATLT0vMEkM7qpq-pPI46QBbZXqLNnVWC-zks";
+export function batchUpdate({
+  slidesClient,
+  presentationId,
+}: {
+  slidesClient: slides_v1.Slides;
+  presentationId: string;
+}) {
   const slide1ObjectId = uuidv4();
   const shapeObjectId = uuidv4();
 
-  slides.presentations.batchUpdate(
+  slidesClient.presentations.batchUpdate(
     {
       presentationId,
       requestBody: {
@@ -82,9 +55,9 @@ app.get("/oauth2callback", async (req, res) => {
             updateTextStyle: {
               objectId: shapeObjectId,
               style: {
-                fontFamily: "Arial",
+                fontFamily: "Inter",
                 fontSize: {
-                  magnitude: 24,
+                  magnitude: 36,
                   unit: "PT",
                 },
                 foregroundColor: {
@@ -103,6 +76,18 @@ app.get("/oauth2callback", async (req, res) => {
               fields: "fontFamily,fontSize,foregroundColor",
             },
           },
+          {
+            updateParagraphStyle: {
+              objectId: shapeObjectId,
+              style: {
+                alignment: "CENTER",
+              },
+              textRange: {
+                type: "ALL",
+              },
+              fields: "alignment",
+            },
+          },
         ],
       },
     },
@@ -112,11 +97,10 @@ app.get("/oauth2callback", async (req, res) => {
         return;
       }
 
-      console.log(res, "res");
+      if (res?.statusText === "OK") {
+        console.log("Slides updated successfully");
+        console.log(res.data);
+      }
     }
   );
-});
-
-app.listen(3000, () =>
-  console.log("Server running on http://localhost:3000/auth")
-);
+}
