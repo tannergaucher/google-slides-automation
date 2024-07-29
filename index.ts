@@ -1,9 +1,9 @@
 import express from "express";
 import { google } from "googleapis";
 import dotenv from "dotenv";
-import { v4 as uuidv4 } from "uuid";
 
-import { batchUpdate } from "./batch-update";
+import { batchUpdatePresentation } from "./batch-update-presentation";
+import { unit1lesson1 } from "./lessons/grade-2/unit-1/lesson-1";
 
 dotenv.config();
 
@@ -31,12 +31,12 @@ app.get("/oauth2callback", async (req, res) => {
   oauth2Client.setCredentials(tokens);
   res.send("Authentication successful");
 
-  batchUpdate({
+  batchUpdatePresentation({
     slidesClient: google.slides({
       version: "v1",
       auth: oauth2Client,
     }),
-    presentationId: "1bfRKbhaATLT0vMEkM7qpq-pPI46QBbZXqLNnVWC-zks",
+    lesson: unit1lesson1,
   });
 });
 
