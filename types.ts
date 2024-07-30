@@ -24,11 +24,7 @@ export interface Lesson {
     content: string;
     strategy: string;
   };
-  vocabulary?: {
-    readingTextWords?: string[];
-    listeningTextWords?: string[];
-    wordStudy?: string;
-  };
+  vocabulary?: string[];
   grammar?: {
     grammarPoint: string;
     examples: string[];

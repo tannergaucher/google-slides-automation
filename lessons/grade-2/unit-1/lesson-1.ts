@@ -19,17 +19,15 @@ export const unit1lesson1: Lesson = {
     content: "Informational text (nonfiction)",
     strategy: "Compare and contrast",
   },
-  vocabulary: {
-    readingTextWords: [
-      "skin",
-      "mammals",
-      "eggs",
-      "amphibians",
-      "scales",
-      "gills",
-      "feathers",
-      "wings",
-      "fur",
-    ],
-  },
+  vocabulary: [
+    "skin",
+    "mammals",
+    "eggs",
+    "amphibians",
+    "scales",
+    "gills",
+    "feathers",
+    "wings",
+    "fur",
+  ],
 };

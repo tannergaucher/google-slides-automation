@@ -210,9 +210,9 @@ function createObjectivesSlideRequests({ lesson }: { lesson: Lesson }) {
   return objectivesSlideRequests;
 }
 
-function createReadingVocabularySlideRequests({ lesson }: { lesson: Lesson }) {
+function createVocabularySlideRequests({ lesson }: { lesson: Lesson }) {
   const readingVocabSlides =
-    lesson.vocabulary?.readingTextWords?.map((word) => {
+    lesson.vocabulary?.map((word) => {
       return {
         slideId: uuidv4(),
         titleObjectId: uuidv4(),
@@ -323,7 +323,7 @@ export function batchUpdatePresentation({
 }) {
   const lessonContentSlideRequests =
     lesson.lessonType === "Reading"
-      ? createReadingVocabularySlideRequests({ lesson })
+      ? createVocabularySlideRequests({ lesson })
       : [];
 
   slidesClient.presentations.batchUpdate(
