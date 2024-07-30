@@ -1,6 +1,7 @@
 export interface Lesson {
   presentationId: string;
   grade: 2 | 3;
+  lessonNumber: number;
   unitTitle: string;
   unitNumber: number;
   unitBigQuestion: string;

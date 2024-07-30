@@ -4,6 +4,7 @@ export const unit1lesson1: Lesson = {
   presentationId: "1bfRKbhaATLT0vMEkM7qpq-pPI46QBbZXqLNnVWC-zks",
   grade: 2,
   unitTitle: "Amazing Animals",
+  lessonNumber: 1,
   unitNumber: 1,
   studentBookStartPage: 6,
   studentBookEndPage: 8,

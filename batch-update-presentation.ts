@@ -3,80 +3,43 @@ import { v4 as uuidv4 } from "uuid";
 import { Lesson } from "./types";
 
 function createTitleSlideRequests({ lesson }: { lesson: Lesson }) {
-  const titleSlideId = uuidv4();
-  const titleSlideShapeObjectId = uuidv4();
+  const sectionSlideId = uuidv4();
+  const titleObjectId = uuidv4();
+  const bodyObjectId = uuidv4();
 
   const titleSlideRequests: slides_v1.Schema$Request[] = [
     {
       createSlide: {
-        objectId: titleSlideId,
+        objectId: sectionSlideId,
         slideLayoutReference: {
-          predefinedLayout: "BLANK",
+          predefinedLayout: "TITLE_AND_BODY",
         },
-      },
-    },
-    {
-      createShape: {
-        objectId: titleSlideShapeObjectId,
-        shapeType: "TEXT_BOX",
-        elementProperties: {
-          pageObjectId: titleSlideId,
-          size: {
-            height: { magnitude: 100, unit: "PT" },
-            width: { magnitude: 600, unit: "PT" },
+        placeholderIdMappings: [
+          {
+            layoutPlaceholder: {
+              type: "TITLE",
+            },
+            objectId: titleObjectId,
           },
-          transform: {
-            scaleX: 1,
-            scaleY: 1,
-            translateX: 60,
-            translateY: 30,
-            unit: "PT",
+          {
+            layoutPlaceholder: {
+              type: "BODY",
+            },
+            objectId: bodyObjectId,
           },
-        },
+        ],
       },
     },
     {
       insertText: {
-        objectId: titleSlideShapeObjectId,
-        insertionIndex: 0,
-        text: lesson.unitTitle,
+        objectId: titleObjectId,
+        text: `Unit ${lesson.unitNumber} - ${lesson.unitTitle}`,
       },
     },
     {
-      updateTextStyle: {
-        objectId: titleSlideShapeObjectId,
-        style: {
-          fontFamily: "Inter",
-          fontSize: {
-            magnitude: 36,
-            unit: "PT",
-          },
-          foregroundColor: {
-            opaqueColor: {
-              rgbColor: {
-                red: 0,
-                green: 0,
-                blue: 0,
-              },
-            },
-          },
-        },
-        textRange: {
-          type: "ALL",
-        },
-        fields: "fontFamily,fontSize,foregroundColor",
-      },
-    },
-    {
-      updateParagraphStyle: {
-        objectId: titleSlideShapeObjectId,
-        style: {
-          alignment: "CENTER",
-        },
-        textRange: {
-          type: "ALL",
-        },
-        fields: "alignment",
+      insertText: {
+        objectId: bodyObjectId,
+        text: `Grade ${lesson.grade} - Lesson ${lesson.lessonNumber}`,
       },
     },
   ];
@@ -93,7 +56,7 @@ function createWarmUpSlideRequests({ lesson }: { lesson: Lesson }) {
       createSlide: {
         objectId: warmUpSlideId,
         slideLayoutReference: {
-          predefinedLayout: "BLANK",
+          predefinedLayout: "",
         },
       },
     },
@@ -248,8 +211,6 @@ function createObjectivesSlideRequests({ lesson }: { lesson: Lesson }) {
 }
 
 function createReadingVocabularySlideRequests({ lesson }: { lesson: Lesson }) {
-  // create ids for each slide
-
   const readingVocabSlides =
     lesson.vocabulary?.readingTextWords?.map((word) => {
       return {
@@ -260,7 +221,6 @@ function createReadingVocabularySlideRequests({ lesson }: { lesson: Lesson }) {
       };
     }) || [];
 
-  // now we can create the requests for each slide
   const readingVocabSlideRequests = readingVocabSlides.map((slide) => {
     return [
       {
