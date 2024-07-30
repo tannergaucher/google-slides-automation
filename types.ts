@@ -4,6 +4,10 @@ export interface Lesson {
   unitTitle: string;
   unitNumber: number;
   unitBigQuestion: string;
+  studentBookStartPage: number;
+  studentBookEndPage: number;
+  workbookStartPage: number;
+  workbookEndPage: number;
   lessonType:
     | "Reading"
     | "Vocabulary"

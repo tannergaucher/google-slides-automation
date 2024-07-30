@@ -309,6 +309,51 @@ function createReadingVocabularySlideRequests({ lesson }: { lesson: Lesson }) {
   return readingVocabSlideRequests;
 }
 
+function createBooksOpenSlideRequests({ lesson }: { lesson: Lesson }) {
+  const booksOpenSlideId = uuidv4();
+  const titleObjectId = uuidv4();
+  const bodyObjectId = uuidv4();
+
+  const booksOpenSlideRequests: slides_v1.Schema$Request[] = [
+    {
+      createSlide: {
+        objectId: booksOpenSlideId,
+        slideLayoutReference: {
+          predefinedLayout: "TITLE_AND_BODY",
+        },
+        placeholderIdMappings: [
+          {
+            layoutPlaceholder: {
+              type: "TITLE",
+            },
+            objectId: titleObjectId,
+          },
+          {
+            layoutPlaceholder: {
+              type: "BODY",
+            },
+            objectId: bodyObjectId,
+          },
+        ],
+      },
+    },
+    {
+      insertText: {
+        objectId: titleObjectId,
+        text: "Books Open!",
+      },
+    },
+    {
+      insertText: {
+        objectId: bodyObjectId,
+        text: `Page: ${lesson.studentBookStartPage}`,
+      },
+    },
+  ];
+
+  return booksOpenSlideRequests;
+}
+
 export function batchUpdatePresentation({
   slidesClient,
   lesson,
@@ -330,6 +375,7 @@ export function batchUpdatePresentation({
           ...createWarmUpSlideRequests({ lesson }),
           ...createObjectivesSlideRequests({ lesson }),
           ...lessonContentSlideRequests,
+          ...createBooksOpenSlideRequests({ lesson }),
         ].flat(),
       },
     },

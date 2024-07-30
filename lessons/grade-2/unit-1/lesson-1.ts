@@ -5,6 +5,10 @@ export const unit1lesson1: Lesson = {
   grade: 2,
   unitTitle: "Amazing Animals",
   unitNumber: 1,
+  studentBookStartPage: 6,
+  studentBookEndPage: 8,
+  workbookStartPage: 2,
+  workbookEndPage: 3,
   unitBigQuestion: "How are animals different from one another?",
   lessonType: "Reading",
   warmUp: {
