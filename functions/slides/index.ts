@@ -166,7 +166,7 @@ export async function createVocabularySlideRequests({
     },
   });
 
-  const readingVocabSlides =
+  const vocabularySlidesData =
     lesson.vocabulary?.map((word) => {
       return {
         slideId: uuidv4(),
@@ -177,7 +177,7 @@ export async function createVocabularySlideRequests({
       };
     }) || [];
 
-  const readingVocabSlideRequests = readingVocabSlides.map((slide) => {
+  const vocabularySlidesRequest = vocabularySlidesData.map((slide) => {
     const imageObjectId = uuidv4();
 
     return [
@@ -240,7 +240,7 @@ export async function createVocabularySlideRequests({
     ];
   });
 
-  return readingVocabSlideRequests;
+  return vocabularySlidesRequest;
 }
 
 export function createBooksOpenSlideRequests({ lesson }: { lesson: Lesson }) {
