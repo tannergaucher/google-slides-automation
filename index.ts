@@ -1,6 +1,7 @@
 import express from "express";
 import { google } from "googleapis";
 import dotenv from "dotenv";
+import { PrismaClient } from "@prisma/client";
 
 import { batchUpdatePresentation } from "./batch-update-presentation";
 import { unit1lesson1 } from "./lessons/grade-2/unit-1/lesson-1";
@@ -10,6 +11,8 @@ dotenv.config();
 const app = express();
 
 app.use(express.json());
+
+const prisma = new PrismaClient();
 
 const oauth2Client = new google.auth.OAuth2(
   process.env.GOOGLE_CLIENT_ID,
@@ -32,11 +35,12 @@ app.get("/oauth2callback", async (req, res) => {
   res.send("Authentication successful");
 
   batchUpdatePresentation({
+    prisma,
+    lesson: unit1lesson1,
     slidesClient: google.slides({
       version: "v1",
       auth: oauth2Client,
     }),
-    lesson: unit1lesson1,
   });
 });
 
