@@ -177,7 +177,7 @@ export async function createVocabularySlideRequests({
       };
     }) || [];
 
-  const vocabularySlidesRequest = vocabularySlidesData.map((slide) => {
+  const vocabularySlidesRequests = vocabularySlidesData.map((slide) => {
     const imageObjectId = uuidv4();
 
     return [
@@ -240,7 +240,7 @@ export async function createVocabularySlideRequests({
     ];
   });
 
-  return vocabularySlidesRequest;
+  return vocabularySlidesRequests;
 }
 
 export function createBooksOpenSlideRequests({ lesson }: { lesson: Lesson }) {
