@@ -1,15 +1,16 @@
-import { slides_v1 } from "googleapis";
-import { Lesson } from "./types";
-
 import { PrismaClient } from "@prisma/client";
+import { slides_v1 } from "googleapis";
 
 import {
   createTitleSlideRequests,
   createWarmUpSlideRequests,
   createObjectivesSlideRequests,
   createVocabularySlideRequests,
-  createBooksOpenSlideRequests,
+  createStudentBooksOpenSlideRequests,
+  createWorkbooksOpenSlideRequests,
 } from "./functions/slides/index";
+
+import { type Lesson } from "./types";
 
 export async function batchUpdatePresentation({
   slidesClient,
@@ -29,7 +30,8 @@ export async function batchUpdatePresentation({
           ...createWarmUpSlideRequests({ lesson }),
           ...createObjectivesSlideRequests({ lesson }),
           ...(await createVocabularySlideRequests({ lesson, prisma })),
-          ...createBooksOpenSlideRequests({ lesson }),
+          ...createStudentBooksOpenSlideRequests({ lesson }),
+          ...createWorkbooksOpenSlideRequests({ lesson }),
         ].flat(),
       },
     },

@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 import { PrismaClient } from "@prisma/client";
 import { slides_v1 } from "googleapis";
+import { compact } from "lodash";
 
 import { Lesson } from "../../types";
 
@@ -221,29 +222,45 @@ export async function createVocabularySlideRequests({
           text: "Example: ",
         },
       },
-      {
-        createImage: {
-          url: "https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExM2FlZWx4aHRva25taHk0Z3M3c2lrY2gzOW52M3U5Z3A5dGRkcHZmNyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/ZJMFrqi4oCGt2/giphy.gif",
-          objectId: imageObjectId,
-          elementProperties: {
-            pageObjectId: slide.slideId,
-            transform: {
-              scaleX: 1,
-              scaleY: 1,
-              translateX: 100,
-              translateY: 100,
-              unit: "PT",
-            },
-          },
-        },
-      },
+      // ...slide.sources.map((source) => {
+      //   return {
+      //     createImage: {
+      //       objectId: imageObjectId,
+      //       url: source,
+      //       elementProperties: {
+      //         pageObjectId: slide.slideId,
+      //         size: {
+      //           height: {
+      //             magnitude: 100,
+      //             unit: "PT",
+      //           },
+      //           width: {
+      //             magnitude: 100,
+      //             unit: "PT",
+      //           },
+      //         },
+      //         transform: {
+      //           scaleX: 1,
+      //           scaleY: 1,
+      //           translateX: 100,
+      //           translateY: 100,
+      //           unit: "PT",
+      //         },
+      //       },
+      //     },
+      //   };
+      // }),
     ];
   });
 
   return vocabularySlidesRequests;
 }
 
-export function createBooksOpenSlideRequests({ lesson }: { lesson: Lesson }) {
+export function createStudentBooksOpenSlideRequests({
+  lesson,
+}: {
+  lesson: Lesson;
+}) {
   const booksOpenSlideId = uuidv4();
   const titleObjectId = uuidv4();
   const bodyObjectId = uuidv4();
@@ -286,4 +303,53 @@ export function createBooksOpenSlideRequests({ lesson }: { lesson: Lesson }) {
   ];
 
   return booksOpenSlideRequests;
+}
+
+export function createWorkbooksOpenSlideRequests({
+  lesson,
+}: {
+  lesson: Lesson;
+}) {
+  const workbooksOpenSlideId = uuidv4();
+  const titleObjectId = uuidv4();
+  const bodyObjectId = uuidv4();
+
+  const workbooksOpenSlideRequests: slides_v1.Schema$Request[] = [
+    {
+      createSlide: {
+        objectId: workbooksOpenSlideId,
+        slideLayoutReference: {
+          predefinedLayout: "TITLE_AND_BODY",
+        },
+        placeholderIdMappings: [
+          {
+            layoutPlaceholder: {
+              type: "TITLE",
+            },
+            objectId: titleObjectId,
+          },
+          {
+            layoutPlaceholder: {
+              type: "BODY",
+            },
+            objectId: bodyObjectId,
+          },
+        ],
+      },
+    },
+    {
+      insertText: {
+        objectId: titleObjectId,
+        text: "Workbooks Open!",
+      },
+    },
+    {
+      insertText: {
+        objectId: bodyObjectId,
+        text: `Page: ${lesson.workbookStartPage}`,
+      },
+    },
+  ];
+
+  return workbooksOpenSlideRequests;
 }
