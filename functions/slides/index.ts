@@ -1,7 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 import { PrismaClient } from "@prisma/client";
 import { slides_v1 } from "googleapis";
-import { compact } from "lodash";
 
 import { Lesson } from "../../types";
 
