@@ -8,7 +8,7 @@ import {
   createVocabularySlideRequests,
   createStudentBooksOpenSlideRequests,
   createWorkbooksOpenSlideRequests,
-} from "./functions/slides/index";
+} from "./functions/create-lesson-slides/index";
 
 import { type Lesson } from "./types";
 

@@ -1,6 +1,5 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
@@ -13,7 +12,27 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Lesson {
+  grade  Int
+  number Int
+  name   String
+  words  Word[]
+
+  @@id([grade, number])
+}
+
 model Word {
-  word    String   @id
-  sources String[]
+  word             String            @id
+  sources          String[]
+  exampleSentences ExampleSentence[]
+  Lesson           Lesson?           @relation(fields: [lessonGrade, lessonNumber], references: [grade, number])
+  lessonGrade      Int?
+  lessonNumber     Int?
+}
+
+model ExampleSentence {
+  id       Int    @id
+  sentence String
+  word     Word   @relation(fields: [wordId], references: [word])
+  wordId   String
 }
